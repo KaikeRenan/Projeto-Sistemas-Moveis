@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:Projeto-Sistemas-Moveis/frontend/lib/features/autenticacao/domain/models/workout_series.dart';
+import 'package:projeto_sistemas_moveis/features/autenticacao/domain/models/workout_series.dart';
 
 void main() {
 
