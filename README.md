@@ -1,16 +1,9 @@
-# projeto_sistemas_moveis
+#Aplicativo de Gerenciamento de Treinos de Musculação
 
-A new Flutter project.
+#Sobre o Projeto
 
-## Getting Started
+Este projeto consiste no desenvolvimento de um aplicativo voltado para o gerenciamento de treinos de musculação. A aplicação permite que usuários organizem sua rotina de treinos, registrem exercícios realizados, acompanhem cargas utilizadas e monitorem sua evolução ao longo do tempo.
 
-This project is a starting point for a Flutter application.
+A prática da musculação exige planejamento, disciplina e acompanhamento constante. Muitos praticantes ainda registram seus treinos manualmente ou apenas confiam na memória para lembrar exercícios, séries e progressões de carga. Esse cenário pode dificultar a organização e o progresso nos treinos.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O aplicativo proposto tem como objetivo oferecer uma solução digital que facilite o registro, organização e acompanhamento dos treinos de musculação
