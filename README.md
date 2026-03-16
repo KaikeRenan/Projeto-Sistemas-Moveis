@@ -1,6 +1,6 @@
-#Aplicativo de Gerenciamento de Treinos de Musculação
+# Aplicativo de Gerenciamento de Treinos de Musculação
 
-#Sobre o Projeto
+### Sobre o Projeto
 
 Este projeto consiste no desenvolvimento de um aplicativo voltado para o gerenciamento de treinos de musculação. A aplicação permite que usuários organizem sua rotina de treinos, registrem exercícios realizados, acompanhem cargas utilizadas e monitorem sua evolução ao longo do tempo.
 
