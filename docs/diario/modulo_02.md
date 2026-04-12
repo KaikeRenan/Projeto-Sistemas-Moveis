@@ -10,4 +10,4 @@ Após essa correção, conseguimos executar o projeto normalmente e dar continui
 
 Com essas correções realizadas, os testes passaram a reconhecer corretamente as models do projeto e puderam ser executados normalmente, também realizamos a criação das demais telas do esboço da aplicação, complementando a parte visual planejada para o projeto.
 
-*teste das models for realizado com o comando flutter test test/models no terminal
+*teste das models foi realizado com o comando flutter test test/models no terminal
