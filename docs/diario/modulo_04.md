@@ -6,4 +6,4 @@ Após a aula do professor, foi apresentada a biblioteca GoRouter, que se mostrou
 
 A implementação do GoRouter ocorreu sem grandes dificuldades e contribuiu significativamente para melhorar a fluidez da navegação entre as telas do aplicativo.
 
-Além disso, durante este módulo, foi desenvolvida a tela de login.
+Além disso, durante este módulo, foi desenvolvida a tela de login. Inicialmente, havia sido esquecido implementar o mecanismo de redirect dentro da aplicação, o que impactava no controle de acesso entre as rotas. No entanto, com a orientação do professor, esse ajuste foi realizado corretamente. A partir disso, conseguimos integrar o fluxo de autenticação com a navegação, e a tela de login foi utilizada para validar esse comportamento, funcionando conforme o esperado.

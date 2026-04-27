@@ -1,9 +1,35 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+class ServicoAuth extends ChangeNotifier {
+  bool _autenticado = false;
+  bool get autenticado => _autenticado;
+
+  void login() {
+    _autenticado = true;
+    notifyListeners();
+  }
+
+  void logout() {
+    _autenticado = false;
+    notifyListeners();
+  }
+}
+
+final servicoAuth = ServicoAuth();
+
 final GoRouter _roteador = GoRouter(
   initialLocation: '/',
+  refreshListenable: servicoAuth,
+  redirect: (_, state) {
+    final logado = servicoAuth.autenticado;
+    final indoParaLogin = state.matchedLocation == '/login';
+    if (!logado && !indoParaLogin) return '/login';
+    if (logado && indoParaLogin) return '/';
+    return null;
+  },
   routes: [
     GoRoute(path: '/', builder: (context, state) => const TelaPrincipal()),
     GoRoute(
@@ -37,6 +63,38 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true),
       routerConfig: _roteador,
+    );
+  }
+}
+
+class CustomBottomNav extends StatelessWidget {
+  final int currentIndex;
+
+  const CustomBottomNav({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: (index) {
+        if (index == 0) context.go('/novoTreino');
+        if (index == 1) context.go('/');
+        if (index == 2) context.go('/calendario');
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add),
+          label: "Adicionar Treino",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: "Página Inicial",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          label: "Calendário",
+        ),
+      ],
     );
   }
 }
@@ -85,30 +143,30 @@ class TelaPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          if (index == 0) {
-            context.push('/novoTreino');
-          } else if (index == 2) {
-            context.push('/calendario');
-          }
-        },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add, color: Colors.black),
-            label: "Adicionar Treino",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.black),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today, color: Colors.black),
-            label: "Calendário",
-          ),
-        ],
-        // selectedItemColor: Colors.deepPurple,
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: 1),
+      // BottomNavigationBar(
+      //   onTap: (index) {
+      //     if (index == 0) {
+      //       context.go('/novoTreino');
+      //     } else if (index == 2) {
+      //       context.go('/calendario');
+      //     }
+      //   },
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.add, color: Colors.black),
+      //       label: "Adicionar Treino",
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home, color: Colors.black),
+      //       label: "Home",
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.calendar_today, color: Colors.black),
+      //       label: "Calendário",
+      //     ),
+      //   ],
+      //   // selectedItemColor: Colors.deepPurple,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -121,7 +179,10 @@ class TelaPrincipal extends StatelessWidget {
               // snap: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
-                titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                titlePadding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 15,
+                ),
                 title: Text(
                   'Terça-feira, o que vamos treinar hoje?',
                   style: TextStyle(color: Colors.white, fontSize: 16),
@@ -132,6 +193,10 @@ class TelaPrincipal extends StatelessWidget {
                     Image.network(
                       'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) return child;
+                        return Center(child: CircularProgressIndicator());
+                      },
                     ),
                     Container(color: Colors.black.withValues(alpha: 0.6)),
                     Align(
@@ -142,7 +207,11 @@ class TelaPrincipal extends StatelessWidget {
                         child: SafeArea(
                           bottom: false,
                           child: ListTile(
-                            leading: CircleAvatar(child: Icon(Icons.person)),
+                            // Perfil
+                            leading: GestureDetector(
+                              onTap: () => context.push('/perfil'),
+                              child: CircleAvatar(child: Icon(Icons.person)),
+                            ),
                             title: Text(
                               "Bem-vindo!",
                               style: TextStyle(
@@ -159,10 +228,12 @@ class TelaPrincipal extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            // Notificação
                             trailing: IconButton(
                               hoverColor: Colors.white,
                               onPressed: () {
-                                // context.go('/perfil');
+                                // context.push('/notificacao');
+                                // context.push('/login');
                               },
                               icon: Icon(
                                 Icons.notifications_outlined,
@@ -191,7 +262,7 @@ class TelaPrincipal extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final item = treino[index];
-        
+
                 return Card(
                   child: ExpansionTile(
                     title: Text(item["nome"] as String),
@@ -270,33 +341,11 @@ class TelaNovoTreino extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Crie seu treino'),
+        centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          if (index == 1) {
-            context.go('/');
-          } else if (index == 2) {
-            context.go('/calendario');
-          }
-        },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add, color: Colors.black),
-            label: "Adicionar Treino",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.black),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today, color: Colors.black),
-            label: "Calendário",
-          ),
-        ],
-        // selectedItemColor: Colors.deepPurple,
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: 0),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -365,30 +414,7 @@ class _TelaCalendarioState extends State<TelaCalendario> {
         foregroundColor: Colors.white,
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16.0), bottomRight: Radius.circular(16.0))),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          if (index == 0) {
-            context.push('/novoTreino');
-          } else if (index == 1) {
-            context.go('/');
-          }
-        },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add, color: Colors.black),
-            label: "Adicionar Treino",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.black),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today, color: Colors.black),
-            label: "Calendário",
-          ),
-        ],
-        // selectedItemColor: Colors.deepPurple,
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: 2),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: TableCalendar(
@@ -409,12 +435,12 @@ class _TelaCalendarioState extends State<TelaCalendario> {
     );
   }
 
-  void _onDaySelected(diaSelecionado, hoje) {
-    if (isSameDay(_diaSelecionado, diaSelecionado)) {
-      setState() {
+  void _onDaySelected(DateTime diaSelecionado, DateTime hoje) {
+    if (!isSameDay(_diaSelecionado, diaSelecionado)) {
+      setState(() {
         _diaSelecionado = diaSelecionado;
         _hoje = hoje;
-      }
+      });
     }
   }
 }
@@ -427,6 +453,7 @@ class TelaSaibaMais extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mais sobre treinamento'),
+        centerTitle: true,
         titleTextStyle: TextStyle(color: Colors.white),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -448,7 +475,102 @@ class TelaLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        // title: const Image(image: NetworkImage("https://www.flaticon.com/br/icone-gratis/haltere_563879?related_id=563828&origin=search"),),
+        title: const Text('Login'),
+        centerTitle: true,
+        titleTextStyle: TextStyle(color: Colors.white),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        // decoration: const BoxDecoration(
+        //   gradient: SweepGradient  (
+        //     colors: [Colors.deepPurple, Colors.black],
+        //   ),
+        // ),
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(50),
+        color: Colors.deepPurple,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 30),
+            Text(
+              "Digite os dados de acesso nos campos abaixo.",
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(height: 30),
+            CupertinoTextField(
+              padding: EdgeInsets.all(10),
+              placeholder: "Digite o seu e-mail",
+              placeholderStyle: TextStyle(color: Colors.white70, fontSize: 14),
+              style: TextStyle(color: Colors.white70, fontSize: 14),
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.all(Radius.circular(7)),
+              ),
+            ),
+            SizedBox(height: 5),
+            CupertinoTextField(
+              padding: EdgeInsets.all(10),
+              placeholder: "Digite sua senha",
+              obscureText: true,
+              placeholderStyle: TextStyle(color: Colors.white70, fontSize: 14),
+              style: TextStyle(color: Colors.white70, fontSize: 14),
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.all(Radius.circular(7)),
+              ),
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity,
+              child: CupertinoButton(
+                padding: const EdgeInsets.all(17),
+                color: Colors.pink,
+                child: const Text(
+                  "Acessar",
+                  style: TextStyle(
+                    color: Colors.black45,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onPressed: () {
+                  servicoAuth.login();
+                  context.go('/');
+                },
+              ),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white70, width: 0.8),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: CupertinoButton(
+                child: const Text(
+                  "Crie sua conta",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onPressed: () {
+                  servicoAuth.login();
+                  context.go('/');
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -457,6 +579,22 @@ class TelaPerfil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Perfil'),
+        centerTitle: true,
+        titleTextStyle: TextStyle(color: Colors.white),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Text(
+            "Lorem Ipsum Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+          ),
+        ),
+      ),
+    );
   }
 }
