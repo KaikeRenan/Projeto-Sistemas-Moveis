@@ -1,4 +1,6 @@
-Dificuldades Enfrentadas no Módulo 03
+Dificuldades Enfrentadas no Módulo 03 e 04
+
+A proposta inicial do Módulo 03 era desenvolver apenas a tela principal. No entanto, o grupo avançou além do esperado, implementando múltiplas telas do aplicativo e, consequentemente, antecipando parte da proposta do Módulo 04, que consistia no desenvolvimento das demais telas principais.
 
 Durante o desenvolvimento do Módulo 03, após algumas aulas, tivemos contato com novos widgets do Flutter, o que ampliou significativamente as possibilidades de desenvolvimento do aplicativo, exemplo, os Slivers.
 

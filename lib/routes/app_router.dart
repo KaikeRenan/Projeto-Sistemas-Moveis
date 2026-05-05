@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:projeto_sistemas_moveis/core/auth/auth_service.dart';
-import 'package:projeto_sistemas_moveis/features/auth/tela_cadastro.dart';
-import 'package:projeto_sistemas_moveis/features/auth/tela_login.dart';
+import 'package:projeto_sistemas_moveis/features/autenticacao/tela_cadastro.dart';
+import 'package:projeto_sistemas_moveis/features/autenticacao/tela_login.dart';
 import 'package:projeto_sistemas_moveis/features/calendario/tela_calendario.dart';
 import 'package:projeto_sistemas_moveis/features/home/tela_principal.dart';
 import 'package:projeto_sistemas_moveis/features/perfil/tela_perfil.dart';

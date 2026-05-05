@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:projeto_sistemas_moveis/features/auth/domain/models/workout.dart';
-import 'package:projeto_sistemas_moveis/features/auth/domain/models/enums.dart';
+import 'package:projeto_sistemas_moveis/features/autenticacao/domain/models/workout.dart';
+import 'package:projeto_sistemas_moveis/features/autenticacao/domain/models/enums.dart';
 
 
 void main() {

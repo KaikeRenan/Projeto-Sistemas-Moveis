@@ -1,4 +1,4 @@
-Dificuldades Enfrentadas no Módulo 04
+Dificuldades Enfrentadas no Módulo 05
 
 Uma das principais dificuldades encontradas foi a utilização do sistema de navegação padrão do Flutter, especialmente o Navigator, que apresentou certa complexidade na organização das rotas e no controle da navegação entre as telas.
 
