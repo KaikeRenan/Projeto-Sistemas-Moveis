@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:projeto_sistemas_moveis/core/provider/treino_provider.dart';
 import 'package:projeto_sistemas_moveis/widgets/custom_bottom_nav.dart';
+import 'package:provider/provider.dart';
 
 class TelaPrincipal extends StatelessWidget {
   const TelaPrincipal({super.key});
 
-  static const treino = [
-    {
-      "nome": "Treino A",
-      "tipo": "Push",
-      "exercicios": ["Supino Reto", "Desenvolvimento", "Supino Inclinado"],
-    },
-    {
-      "nome": "Treino B",
-      "tipo": "Pull",
-      "exercicios": ["Puxada Alta", "Remada", "Rosca Bíceps"],
-    },
-    {
-      "nome": "Treino C",
-      "tipo": "Legs",
-      "exercicios": ["Agachamento", "Leg Press", "Extensora"],
-    },
-    {
-      "nome": "Descanso",
-      "tipo": "Legs",
-      "exercicios": ["Agachamento", "Leg Press", "Extensora"],
-    },
-    {
-      "nome": "Treino D",
-      "tipo": "Upper",
-      "exercicios": ["Supino", "Remada", "Desenvolvimento", "Barra Fixa"],
-    },
-    {
-      "nome": "Treino E",
-      "tipo": "Lower",
-      "exercicios": ["Stiff", "Cadeira Flexora", "Afundo", "Panturrilha"],
-    },
-    {
-      "nome": "Descanso",
-      "tipo": "Legs",
-      "exercicios": ["Agachamento", "Leg Press", "Extensora"],
-    },
-  ];
+  // static const treino = [
+  //   {
+  //     "nome": "Treino A",
+  //     "tipo": "Push",
+  //     "exercicios": ["Supino Reto", "Desenvolvimento", "Supino Inclinado"],
+  //   }
+  //   {
+  //     "nome": "Treino B",
+  //     "tipo": "Pull",
+  //     "exercicios": ["Puxada Alta", "Remada", "Rosca Bíceps"],
+  //   }
+  //   {
+  //     "nome": "Treino C",
+  //     "tipo": "Legs",
+  //     "exercicios": ["Agachamento", "Leg Press", "Extensora"],
+  //   }
+  //   {
+  //     "nome": "Descanso",
+  //     "tipo": "Legs",
+  //     "exercicios": ["Agachamento", "Leg Press", "Extensora"],
+  //   }
+  //   {
+  //     "nome": "Treino D",
+  //     "tipo": "Upper",
+  //     "exercicios": ["Supino", "Remada", "Desenvolvimento", "Barra Fixa"],
+  //   }
+  //   {
+  //     "nome": "Treino E",
+  //     "tipo": "Lower",
+  //     "exercicios": ["Stiff", "Cadeira Flexora", "Afundo", "Panturrilha"],
+  //   }
+  //   {
+  //     "nome": "Descanso",
+  //     "tipo": "Legs",
+  //     "exercicios": ["Agachamento", "Leg Press", "Extensora"],
+  //   }]
 
   static const divisoes = [
     {
@@ -69,6 +70,8 @@ class TelaPrincipal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final treinos = context.watch<TreinoProvider>().treinos;
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBarPersonalizada(currentIndex: 1),
       body: SafeArea(
@@ -166,18 +169,22 @@ class TelaPrincipal extends StatelessWidget {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                final item = treino[index];
+                final item = treinos[index];
 
                 return Card(
                   child: ExpansionTile(
-                    title: Text(item["nome"] as String),
-                    subtitle: Text(item["tipo"] as String),
-                    children: (item["exercicios"] as List<String>)
-                        .map((e) => ListTile(title: Text(e)))
-                        .toList(),
+                    title: Text(item.nome),
+                    subtitle: Text(item.diaSemana.name),
+                    children: [
+                      ListTile(
+                        title: Text(
+                          item.descanso ? 'Dia de Descanso' : 'Treino ativo',
+                        ),
+                      ),
+                    ],
                   ),
                 );
-              }, childCount: treino.length),
+              }, childCount: treinos.length),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -198,7 +205,7 @@ class TelaPrincipal extends StatelessWidget {
                       height: 220,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
-                        children: divisoes.map((item) {
+                        children: TelaPrincipal.divisoes.map((item) {
                           return GestureDetector(
                             onTap: () {},
                             child: Container(

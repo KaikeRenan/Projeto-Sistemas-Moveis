@@ -1,3 +1,3 @@
-enum DayWeek { segunda, terca, quarta, quinta, sexta, sabado, domingo }
+enum DiaSemana { Segunda, Terca, Quarta, Quinta, Sexta, Sabado, Domingo }
 
-enum MuscularGroup { peito, costas, pernas, ombro, biceps, triceps }
+enum GrupoMuscular { peito, costas, pernas, ombro, biceps, triceps }
